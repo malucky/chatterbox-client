@@ -17,6 +17,7 @@ var sendJokes = function(data) {
 
 var message;
 var lastTime = 0; //time when most recent message was posted
+var rooms = {}; //store the different rooms
 
 //Ajax POST- submits messages and stringifies them
 var postMessage = function(myMessage){
@@ -92,7 +93,6 @@ var displayAllMessages = function(data) {
 
 
 /****************** room drop down list *****************************/
-var rooms = {};
 var addRoom = function(roomName) {
   if (rooms[roomName] === undefined) {
     rooms[roomName] = roomName;
