@@ -26,3 +26,7 @@ body {
 .display div {
     border: 2px dotted grey;
 }
+
+.hideMessage {
+    display: none;
+}
