@@ -1,20 +1,3 @@
-// YOUR CODE HERE:
-
-/****************************jokes *************************/
-/*var jokes = ["Knock, knock. Who's there? Lettuce. Lettuce who? Lettuce in, it's cold out here.", "Knock, knock Who's there? Kent. Kent who? Kent you tell by my voice?", "Knock, knock. Who's there? Jess. Jess who? Jess me and my shadow", "Yo mama so dumb she hears it's chilly outside so she gets a bowl", "Yo mama so dumb she got hit by a cup and told the police she got mugged", "yo mama so dumb she sprayed a tree with axe body spray and thought it would fall down", "Yo mama's so dumb she put two M&M's in her ears and thought she was listening to Eminem.", "Yo mama so dumb she went to the library to find Facebook"];
-
-var sendJokes = function(data) {
-  for (var i = 0; i < data.results.length; i++) {
-    var jokeMessage = {
-      'username': data.results[i].username,
-      'text': jokes[Math.floor(Math.random()*jokes.length)],
-      'roomname': 'joke room'
-    };
-    postMessage(jokeMessage);
-  }
-};
-*/
-
 var message;
 var lastTime = 0; //time when most recent message was posted
 var rooms = {}; //store the different rooms
@@ -23,7 +6,7 @@ var rooms = {}; //store the different rooms
 var postMessage = function(myMessage){
   $.ajax({
     // always use this url
-    url: 'https://api.parse.com/1/classes/chatterbox',
+    url: 'http://localhost:8080/post',
     type: 'POST',
     data: JSON.stringify(myMessage),
     contentType: 'application/json',
@@ -41,7 +24,7 @@ var postMessage = function(myMessage){
 var getMessages = function(){
   $.ajax({
     // always use this url
-    url: 'https://api.parse.com/1/classes/chatterbox/',
+    url: 'http://localhost:8080/get', //https://api.parse.com/1/classes/chatterbox
     type: 'GET',
     data: {order: '-createdAt'},
     contentType: 'application/json',
@@ -82,13 +65,15 @@ var displayAllMessages = function(data) {
   var currentRoom = $('.rooms').val();
 
 //If the message is more recent than the last message posted, call displayMessage to post it
-  for (var i = messages.length - 1; i >= 0; i--) {
-    if (Date.parse(messages[i].createdAt) > lastTime) {
-      displayMessage(messages[i]);
+  if (messages.length > 0) {
+    for (var i = messages.length - 1; i >= 0; i--) {
+      if (Date.parse(messages[i].createdAt) > lastTime) {
+        displayMessage(messages[i]);
+      }
     }
+    lastTime = Date.parse(messages[0].createdAt); //Continue to reset the last time a message was posted
+    changeRoom();
   }
-  lastTime = Date.parse(messages[0].createdAt); //Continue to reset the last time a message was posted
-  changeRoom();
 };
 
 
